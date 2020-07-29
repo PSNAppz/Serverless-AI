@@ -1,2 +1,2 @@
-# Serverless-AI
-AI application API(FastAPI) deployment using AWS sagemaker and AWS Lambda with Magnum for ASGI
+# Serverless AI
+FastAPI implementation of serverless AI application using AWS S3 for the deployment package, AWS Cloudformation to build API stack, API Gateway, and AWS Lambda.

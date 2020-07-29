@@ -1,0 +1,30 @@
+language: python
+cache: pip
+python:
+- '3.7'
+install:
+- pip install awscli
+- pip install aws-sam-cli
+jobs:
+  include:
+    - stage: test
+      script:
+        - pip install pytest
+        - pip install -e .
+        - pytest . -v
+    - stage: deploy
+      script:
+        - sam validate
+        - sam build --debug
+        - sam package --s3-bucket my-travis-deployment-bucket --output-template-file out.yml --region eu-west-1
+        - sam deploy --template-file out.yml --stack-name example-stack-name --region eu-west-1 --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
+      skip_cleanup: true
+      if: branch = master
+notifications:
+  email:
+    on_failure: always
+env:
+  global:
+  - AWS_DEFAULT_REGION=eu-west-1
+  - secure: "JLkyPh+xZSGQZcYjYkoik72w17ozJLz68p08fnrX2A4o1Fn008x7zGwp7wAOVxDRvZ1dVI21QzI1l2lcQVrLgy9gQ9G2JaJkjrcvZeN/pBEBay0Nw/gwyzlR/LbzUP6nnY5WITkF3QJ5QYpKvN9LXCKw+hzGcEY4PYc6SAstzIZ/1QYxTyF9lKtQ5+fJpg8NxX1Ec4PEy59iCQX5hpjqzcQk+0b7NXaskSO2pdp5UVSSJQhZEQDdshNM5JSFuiG2dowqssuz+hheBUtPlxxkqEKSvkNdegjLIPPhHL1A9RCRpIQpgjhXWYr3Uu5IwCubWDC5tZgjGvew1MYS/Oqt7WJ/7a7NQ+PxQp9rNnOgJGQwUT5vKqKrzY2lbja38nFiQd4esztEE7oWUgz0Ko83WoqDxHtJbbMC7yuLxKDatfui2c+xvKmiLNlVqkqXMOqKuDHh+5Ku1BH6jiiuhN4k18cf2PBaXfvdUPPr/JPVL1X6Fm/OVG1C9dQ+9M4uBOEgL3d3V2Fwno4H4YTTMoJSwpVRNDOTtwuqO9bSK2KyGBtnWOv/zDPBET1lTps09dpwWq7pZ+8x4Hx+NPJzMqWTkebJHFverKT9spZQuhqjM+/IFJUMayL15TVuLHsFRnQbLNWxolrHRf//T6BRBX5b4ESzmPC6RSws4oBJX5Rs6U8="
+  - secure: "ShZJxJoQvlOgmuKJbsEB2m9CPHZwsOdFpeqIZgaLYbIra3ZVKugUOGa2Tqq/bbZHW/NW4pDLm+hGQBDHLHYS8ykMZKM3colHO7WIJZxWn900IBqFi00iznqhMh5Sls3OHhZqMTvjY1PL5+f8c7w3EQ307xTTDBAfMEgocTdN5/ooXD6xbWe1t27f4KqlqS8PPJKnScdQpX9USZd3Yja8xkdY3vABH8KABLGy3J7UqgP5GPl9s4P0ANEuWv7rzfbXs1rm457WDvyzRwLvGFVM+SAKASRDIKeyLaI7mrDiObhl42XxHc23ybip6WqXtAPszuv7ufsjZ01xABorsWJVwfqzpHOH4CoE1NBN11Zq3j/aQOoKoZ27TH5Ti7yknsfl5AKqRZCnGx+LCdq1hrRlD1UFwYi371VR6NIkQIkWsz60mhiXSsUp4WbLf4Qjh78aht/dBO9yecpwwt7AgCiqyq6ICpHfR9/uxQTzrgj5CDyLAieyp19eAU0khx+wDOdSsGWtzQj+vBZ3emooUgeHOXGjTy9+O/j/p4nwbBSnyDxTfeZ0ordvFijrUifvlUAswGc6HtvH2U76GWxGUstFD2Hd09RGHYRBMRFzJ6mmuEap+8VXl3pxm/M/YGnOrdcuJkUWc/dz1eKF9oo4w23s4kBFkJhO4D2LP5xaNmy1JkY="
