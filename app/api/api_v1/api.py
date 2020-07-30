@@ -1,24 +1,7 @@
-from fastapi import FastAPI
-from example_app.api.api_v1.api import router as api_router
-from example_app.core.config import API_V1_STR, PROJECT_NAME
-from mangum import Mangum
+from fastapi import APIRouter
 
-app = FastAPI(title=PROJECT_NAME)
-app.include_router(api_router, prefix=API_V1_STR)
+from .endpoints.sample import router as sample_router
 
 
-@app.get("/ping")
-def pong():
-    """
-    Sanity check.
-
-    This will let the user know that the service is operational.
-
-    And this path operation will:
-    * show a life sign
-
-    """
-    return {"ping": "pong!"}
-
-
-handler = Mangum(app, enable_lifespan=False)
+router = APIRouter()
+router.include_router(sample_router)
