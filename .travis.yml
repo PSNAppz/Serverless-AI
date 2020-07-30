@@ -22,7 +22,7 @@ jobs:
       if: branch = master
 notifications:
   email:
-    on_failure: always
+    on_failure: never
 env:
   global:
   - AWS_DEFAULT_REGION=eu-west-1
