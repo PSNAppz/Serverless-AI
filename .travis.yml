@@ -10,7 +10,7 @@ jobs:
     - stage: test
       script:
         - pip install pytest
-        - pip install -e .
+        - pip install -r requirements.txt
         - pytest . -v
     - stage: deploy
       script:
