@@ -3,7 +3,7 @@ cache: pip
 python:
 - '3.7'
 before_install:
-- ./scripts/ecr_credentials.sh
+- ./scripts/aws_config.sh
 install:
 - pip install awscli
 - pip install aws-sam-cli
