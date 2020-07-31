@@ -15,7 +15,7 @@ Resources:
                         Method: ANY
                     Type: Api
             FunctionName: fastapi-lambda
-            CodeUri: ./
+            CodeUri: ./app
             Handler: app.main.handler
             Runtime: python3.7
             Timeout: 300 # timeout of your lambda function

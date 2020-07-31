@@ -3,3 +3,4 @@ venv/
 *.pyc
 .aws-sam/
 *.so
+out.yml
