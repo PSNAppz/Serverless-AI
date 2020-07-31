@@ -20,7 +20,7 @@ jobs:
     - sam build --debug
     - sam package --s3-bucket fastapi-bucket --output-template-file out.yml
       --region eu-west-1
-    - sam deploy --template-file out.yml --stack-name example-stack-name --region
+    - sam deploy --template-file out.yml --stack-name fastapi-deployment-stack --region
       eu-west-1 --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
     skip_cleanup: true
     if: branch = master
