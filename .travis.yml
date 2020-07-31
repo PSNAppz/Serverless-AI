@@ -2,29 +2,33 @@ language: python
 cache: pip
 python:
 - '3.7'
+before_install:
+- ./scripts/ecr_credentials.sh
 install:
 - pip install awscli
 - pip install aws-sam-cli
 jobs:
   include:
-    - stage: test
-      script:
-        - pip install pytest
-        - pip install -r requirements.txt
-        - pytest . -v
-    - stage: deploy
-      script:
-        - sam validate
-        - sam build --debug
-        - sam package --s3-bucket my-travis-deployment-bucket --output-template-file out.yml --region eu-west-1
-        - sam deploy --template-file out.yml --stack-name example-stack-name --region eu-west-1 --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
-      skip_cleanup: true
-      if: branch = master
+  - stage: test
+    script:
+    - pip install pytest
+    - pip install -r requirements.txt
+    - pytest . -v
+  - stage: deploy
+    script:
+    - sam validate
+    - sam build --debug
+    - sam package --s3-bucket fastapi-bucket --output-template-file out.yml
+      --region eu-west-1
+    - sam deploy --template-file out.yml --stack-name example-stack-name --region
+      eu-west-1 --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
+    skip_cleanup: true
+    if: branch = master
 notifications:
   email:
     on_failure: never
 env:
   global:
   - AWS_DEFAULT_REGION=eu-west-1
-  - secure: "JLkyPh+xZSGQZcYjYkoik72w17ozJLz68p08fnrX2A4o1Fn008x7zGwp7wAOVxDRvZ1dVI21QzI1l2lcQVrLgy9gQ9G2JaJkjrcvZeN/pBEBay0Nw/gwyzlR/LbzUP6nnY5WITkF3QJ5QYpKvN9LXCKw+hzGcEY4PYc6SAstzIZ/1QYxTyF9lKtQ5+fJpg8NxX1Ec4PEy59iCQX5hpjqzcQk+0b7NXaskSO2pdp5UVSSJQhZEQDdshNM5JSFuiG2dowqssuz+hheBUtPlxxkqEKSvkNdegjLIPPhHL1A9RCRpIQpgjhXWYr3Uu5IwCubWDC5tZgjGvew1MYS/Oqt7WJ/7a7NQ+PxQp9rNnOgJGQwUT5vKqKrzY2lbja38nFiQd4esztEE7oWUgz0Ko83WoqDxHtJbbMC7yuLxKDatfui2c+xvKmiLNlVqkqXMOqKuDHh+5Ku1BH6jiiuhN4k18cf2PBaXfvdUPPr/JPVL1X6Fm/OVG1C9dQ+9M4uBOEgL3d3V2Fwno4H4YTTMoJSwpVRNDOTtwuqO9bSK2KyGBtnWOv/zDPBET1lTps09dpwWq7pZ+8x4Hx+NPJzMqWTkebJHFverKT9spZQuhqjM+/IFJUMayL15TVuLHsFRnQbLNWxolrHRf//T6BRBX5b4ESzmPC6RSws4oBJX5Rs6U8="
-  - secure: "ShZJxJoQvlOgmuKJbsEB2m9CPHZwsOdFpeqIZgaLYbIra3ZVKugUOGa2Tqq/bbZHW/NW4pDLm+hGQBDHLHYS8ykMZKM3colHO7WIJZxWn900IBqFi00iznqhMh5Sls3OHhZqMTvjY1PL5+f8c7w3EQ307xTTDBAfMEgocTdN5/ooXD6xbWe1t27f4KqlqS8PPJKnScdQpX9USZd3Yja8xkdY3vABH8KABLGy3J7UqgP5GPl9s4P0ANEuWv7rzfbXs1rm457WDvyzRwLvGFVM+SAKASRDIKeyLaI7mrDiObhl42XxHc23ybip6WqXtAPszuv7ufsjZ01xABorsWJVwfqzpHOH4CoE1NBN11Zq3j/aQOoKoZ27TH5Ti7yknsfl5AKqRZCnGx+LCdq1hrRlD1UFwYi371VR6NIkQIkWsz60mhiXSsUp4WbLf4Qjh78aht/dBO9yecpwwt7AgCiqyq6ICpHfR9/uxQTzrgj5CDyLAieyp19eAU0khx+wDOdSsGWtzQj+vBZ3emooUgeHOXGjTy9+O/j/p4nwbBSnyDxTfeZ0ordvFijrUifvlUAswGc6HtvH2U76GWxGUstFD2Hd09RGHYRBMRFzJ6mmuEap+8VXl3pxm/M/YGnOrdcuJkUWc/dz1eKF9oo4w23s4kBFkJhO4D2LP5xaNmy1JkY="
+  - secure: jkB7Dj5kmOanJd/lrTRTUeHOEKvsLNaICAb+KJfjpszNy8mtt3vhJ0UsJgD2nRx60gTrZpIK52g9F9hsMJeVcc5KZPsw/gLoHErEUAe7Y0EffDb2jPwNb4xfy2gjPdJ/lZywyTcfh2h4LPFs71XDoxBGl60yPV1Vq4SiQRWVzTlTlfs0R9cD0Gto6QK6SzbBf6mwIsYRAFcQMy80loYeV1LBByd2za7gwmXVEG1e2kyebtskkVsvCB+6MvaWO7O0mWV7PT2Vu5YTqXx3VWurdtKpgvJfTcWiSRgER5Sd6NOW3nu0prEE0+wtXQu0uc4rtUcopgZjJiZHFdGoyOl6uv9MN6FMFBHgvaZDQKkguZSd2qlkTatTcdd0n6aKm8C/FZzoSUex0mVpMSExRuynJb9aYycoIbQEcgOT96sVIEsDaPK9cFcmfKiRZQr4RzevhB/lD9z+arIQ4dVQf2MDcNLfbrz3/b6vylUv5B0Wyq/Bf3NgQXL4/3ZQkOyIQRfCjXT624QUjcJ5+IFMqTgk5MFCoXRk+Z2NKmdk3isXdgHFEUzkA7dGE2dDHJBFk1b0Qo0DwjSoPYQgYCfClctS7+k7hB61mH/6h6Tvlj7ftEO7yQos5a79DhUZw6iMiEn36bTDJgUDtVS9cY5lSZ/8R4m2XIKups7YXtWnxDnwTfY=
+  - secure: CiOFy3j+9fUtrsOqv8AW5Tp1Br4/d+Q1HF3GBjEVBvuFMDKW62aKkiQ0J1PKOGGDsyru62shLfj2GtRKnsvGiVlAyZnShwdm4UMFAq5fj6dmLScrGnJgyEb0eAjxX4ypeWSg6hIwv0oWKGvqmom3T7UUzf5gX4tycH561H8ruLvcAzViIHg/9bSglftDzhBJBmiNtR1XsutUGBDzraRPGrFbLMTPmmybRBi+rcksFtK2atlYMp9Rm8DpC9oGQwOuxsCEwA/WuAlicoECqWEH6pNscklLM1MghR8Z+FwBSPYjNWc5S54LcJIlBX0oSjFsJMG/ge7kHSz703TXlBocu2oEuwDlIz+SfRlxIjpXHJrTl5y1G7Ha8YziFDnItkYmZWYpzkmGaGw+NjFKpsPJFKwx79Tp39ATk0Cnd1orPV6RYPh2QBeYMU7Wcw0S9K56egkFZnsUZubG53Do9uPp8+1LYukzLvcdw3RgHz0/SuEuMnBPsRCbKpzk65JfzA1scpg2zks3H/Jqk16SYUa6q4swKE30HyjzQuTrT3HFhh8r70cS7iW2XXd/eTv28EVkIZB4MW3zv8BBFJ8E2erbz5k2dWXvfaQmNr/fPS0BKI/N/Bhn+pzeTNYR0IwiS4ShU6ha+yi4sf0Qv1rk0GFlxlxoTzONUk/JZV01JblwqKk=
