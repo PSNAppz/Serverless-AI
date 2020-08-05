@@ -5,7 +5,6 @@ import json
 
 client = TestClient(app)
 
-
 def is_json(myjson):
     try:
         json_object = json.loads(myjson)
@@ -13,11 +12,9 @@ def is_json(myjson):
         return False
     return True
 
-
 def test_example_endpoint_availability():
     response = client.get(API_V1_STR + "/")
     assert response.status_code == 200
-
 
 def test_example_route_valid_json():
     response = client.get(API_V1_STR + "/")
