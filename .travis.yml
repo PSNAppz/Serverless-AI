@@ -14,16 +14,16 @@ jobs:
     - pip install pytest
     - pip install -r app/requirements.txt
     - pytest . -v
-  - stage: deploy
-    script:
-    - sam validate
-    - sam build --debug
-    - sam package --s3-bucket fastapi-bucket --output-template-file out.yml
-      --region eu-west-1
-    - sam deploy --template-file out.yml --stack-name fastapi --region
-      eu-west-1 --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
-    skip_cleanup: true
-    if: branch = master
+#   - stage: deploy
+#     script:
+#     - sam validate
+#     - sam build --debug
+#     - sam package --s3-bucket fastapi-bucket --output-template-file out.yml
+#       --region eu-west-1
+#     - sam deploy --template-file out.yml --stack-name fastapi --region
+#       eu-west-1 --no-fail-on-empty-changeset --capabilities CAPABILITY_IAM
+#     skip_cleanup: true
+#     if: branch = master
 notifications:
   email:
     on_failure: never
