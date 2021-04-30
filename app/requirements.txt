@@ -118,7 +118,7 @@ requests-toolbelt==0.9.1
 requestsexceptions==1.4.0
 rfc3986==1.4.0
 Routes==2.4.1
-rsa==4.6
+rsa==4.7
 simplegeneric==0.8.1
 simplejson==3.17.2
 six==1.15.0
