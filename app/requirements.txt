@@ -3,7 +3,7 @@ amqp==2.6.0
 appdirs==1.4.4
 attrs==19.3.0
 automaton==2.2.0
-Babel==2.8.0
+Babel==2.9.1
 beautifulsoup4==4.9.1
 cachetools==4.1.1
 certifi==2020.6.20
