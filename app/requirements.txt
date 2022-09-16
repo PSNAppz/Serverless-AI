@@ -74,7 +74,7 @@ oslo.reports==2.1.0
 oslo.serialization==4.0.0
 oslo.service==2.3.2
 oslo.upgradecheck==1.1.0
-oslo.utils==4.4.0
+oslo.utils==4.10.1
 oslo.versionedobjects==2.2.0
 packaging==20.4
 Paste==3.4.3
